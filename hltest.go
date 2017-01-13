@@ -3,13 +3,67 @@ package main
 import (
 	"errors"
 	"fmt"
-
 	"github.com/hyperledger/fabric/core/chaincode/shim"
+	"encoding/json"
+	"strconv"
+	"strings"
+	"regexp"
 )
 
-// SimpleChaincode example simple Chaincode implementation
+//==============================================================================================================================
+//	 Participant types - Each participant type is mapped to an integer which we use to compare to the value stored in a
+//						 user's eCert
+//==============================================================================================================================
+//CURRENT WORKAROUND USES ROLES CHANGE WHEN OWN USERS CAN BE CREATED SO THAT IT READ 1, 2, 3, 4, 5
+const   WAREHOUSE = "warehouse"
+const   TRUCK = "truck"
+const   LOCAL_DEPO = "local_depo"
+const   LOCAL_DELIVERY = "local_delivery"
+const   CUSTOMER = "customer"
+
+
+//==============================================================================================================================
+//	 Status types - Asset lifecycle is broken down into 5 statuses, this is part of the business logic to determine what can
+//					be done to the baggage at points in it's lifecycle
+//==============================================================================================================================
+const   STATE_WAREHOUSE 			=  0
+const   STATE_TRUCK  			=  1
+const   STATE_LOCAL_DEPO 	=  2
+const   STATE_LOCAL_DELIVERY 			=  3
+const   STATE_CUSTOMER 		=  4
+
+
+//==============================================================================================================================
+//	 Structure Definitions
+//==============================================================================================================================
+//	Chaincode - A blank struct for use with Shim (A HyperLedger included go file used for get/put state
+//				and other HyperLedger functions)
+//==============================================================================================================================
 type SimpleChaincode struct {
 }
+
+//==============================================================================================================================
+//	Baggage - Defines the structure for a baggage object. JSON on right tells it what JSON fields to map to
+//			  that element when reading a JSON object into the struct e.g. JSON make -> Struct Make.
+//==============================================================================================================================
+type Baggage struct {
+	ID          string `json:"ID"`
+	Product     string `json:"Product"`
+	TempLimit   string `json:"TempLimit"`
+	HumLimit    string `json:"HumLimit"`
+	State       string `json:"State"`
+}
+
+//==============================================================================================================================
+//	 General Functions
+//==============================================================================================================================
+
+
+
+
+//==============================================================================================================================
+//	 Router Functions
+//==============================================================================================================================
 
 // ============================================================================================================================
 // Main
@@ -35,9 +89,21 @@ func (t *SimpleChaincode) Invoke(stub shim.ChaincodeStubInterface, function stri
 	fmt.Println("invoke is running " + function)
 
 	// Handle different functions
-	if function == "init" {													//initialize the chaincode state, used as reset
-		return t.Init(stub, "init", args)
+	if function == "create_baggage" {
+		// Create new baggage
+		return t.create_baggage(stub, caller, caller_affiliation, args[0])
+	} else if function == "luggage_confirmation" {
+		return t.luggage_confirmation(stub)
+	} else if function == "warehouse_to_truck" {
+		return t.warehouse_to_truck(stub)
+	} else if function == "truck_to_local_depo" {
+		return t.truck_to_local_depo(stub)
+	} else if function == "local_depo_to_local_delivery" {
+		return t.local_depo_to_local_delivery(stub)
+	} else if function == "local_delivery_to_customer"  {
+		return t.local_delivery_to_customer(stub)
 	}
+
 	fmt.Println("invoke did not find func: " + function)					//error
 
 	return nil, errors.New("Received unknown function invocation: " + function)
