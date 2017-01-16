@@ -32,6 +32,10 @@ const   STATE_LOCAL_DEPO 	=  2
 const   STATE_LOCAL_DELIVERY 			=  3
 const   STATE_CUSTOMER 		=  4
 
+//==============================================================================================================================
+//name for the key/value that will store a list of all known baggage
+//==============================================================================================================================
+const BAGGAGE_INDEX_STR = "_baggageindex"
 
 //==============================================================================================================================
 //	 Structure Definitions
@@ -64,7 +68,6 @@ type Baggage struct {
 //==============================================================================================================================
 //	 Router Functions
 //==============================================================================================================================
-
 // ============================================================================================================================
 // Main
 // ============================================================================================================================
@@ -121,4 +124,87 @@ func (t *SimpleChaincode) Query(stub shim.ChaincodeStubInterface, function strin
 	fmt.Println("query did not find func: " + function)						//error
 
 	return nil, errors.New("Received unknown function query: " + function)
+}
+
+
+//=================================================================================================================================
+//	 Create Function
+//=================================================================================================================================
+//	 Create Baggage - Creates the initial JSON for the baggage and then saves it to the ledger.
+//=================================================================================================================================
+func (t *SimpleChaincode) create_baggage(stub shim.ChaincodeStubInterface, args []string) ([]byte, error) {
+	var v Baggage
+
+
+
+	var err error
+
+	//   0       1       2     3
+	// "asdf", "blue", "35", "bob"
+	if len(args) != 5 {
+		return nil, errors.New("Incorrect number of arguments. Expecting 4")
+	}
+
+	//input sanitation
+	fmt.Println("- start init marble")
+	if len(args[0]) <= 0 {
+		return nil, errors.New("1st argument must be a non-empty string")
+	}
+	if len(args[1]) <= 0 {
+		return nil, errors.New("2nd argument must be a non-empty string")
+	}
+	if len(args[2]) <= 0 {
+		return nil, errors.New("3rd argument must be a non-empty string")
+	}
+	if len(args[3]) <= 0 {
+		return nil, errors.New("4th argument must be a non-empty string")
+	}
+
+	// Variables to define the JSON
+	ID         := args[0]
+	Product    := args[1]
+	TempLimit  := args[2]
+	HumLimit   := args[3]
+	State      := "0"
+
+	//check if baggage already exists
+	baggageAsBytes, err := stub.GetState(ID)
+	if err != nil {
+		return nil, errors.New("Failed to get baggage name")
+	}
+	res := Baggage{}
+	json.Unmarshal(baggageAsBytes, &res)
+	if res.ID == ID{
+		fmt.Println("This baggage arleady exists: " + ID)
+		fmt.Println(res);
+		//all stop a baggage by this ID exists
+		return nil, errors.New("This baggage arleady exists")
+	}
+
+	//build the baggage json string manually
+	str := `{"ID": "` + ID + `", "Product": "` + Product + `", "TempLimit": ` + TempLimit + `, "HumLimit": "` + HumLimit + `", "State": "` + State + `"}`
+	//store baggage with ID as key
+	err = stub.PutState(ID, []byte(str))
+	if err != nil {
+		return nil, err
+	}
+
+	//get the baggage index
+	baggageAsBytes, err := stub.GetState(BAGGAGE_INDEX_STR)
+	if err != nil {
+		return nil, errors.New("Failed to get baggage index")
+	}
+	var baggageIndex []string
+	//un stringify it aka JSON.parse()
+	json.Unmarshal(baggageAsBytes, &baggageIndex)
+
+	//add marble name to index list
+	baggageIndex = append(baggageIndex, name)
+	fmt.Println("! baggage index: ", baggageIndex)
+	jsonAsBytes, _ := json.Marshal(baggageIndex)
+	//store name of baggage
+	err = stub.PutState(BAGGAGE_INDEX_STR, jsonAsBytes)
+
+	fmt.Println("- end init baggage")
+	return nil, nil
 }
