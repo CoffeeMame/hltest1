@@ -130,7 +130,8 @@ func (t *SimpleChaincode) Query(stub shim.ChaincodeStubInterface, function strin
 		fmt.Println("hi there " + function)						//error
 		return nil, nil;
 	} else if function == "read" {
-		return t.read(stub, args)
+		//return t.read(stub, args)
+		return []byte("hogefoobaa"), nil
 	}
 	fmt.Println("query did not find func: " + function)						//error
 
@@ -157,10 +158,8 @@ func (t *SimpleChaincode) read(stub shim.ChaincodeStubInterface, args []string) 
 		return nil, errors.New(jsonResp)
 	}
 
-	valAsbytes = []byte("bbb")
 	//send it onward
-	// return valAsbytes, nil
-	return []byte("aaa"), nil
+	return valAsbytes, nil
 
 }
 
