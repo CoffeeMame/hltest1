@@ -5,9 +5,9 @@ import (
 	"fmt"
 	"github.com/hyperledger/fabric/core/chaincode/shim"
 	"encoding/json"
-	"strconv"
-	"strings"
-	"regexp"
+//	"strconv"
+//	"strings"
+//	"regexp"
 )
 
 //==============================================================================================================================
@@ -94,8 +94,14 @@ func (t *SimpleChaincode) Invoke(stub shim.ChaincodeStubInterface, function stri
 	// Handle different functions
 	if function == "create_baggage" {
 		// Create new baggage
-		return t.create_baggage(stub, caller, caller_affiliation, args[0])
-	} else if function == "luggage_confirmation" {
+		return t.create_baggage(stub, args)
+	} else if function == "read" {
+		return t.read(stub, args)
+	}
+
+		/*
+		return t.create_baggage(stub, args)
+	} else if function == "baggage_confirmation" {
 		return t.luggage_confirmation(stub)
 	} else if function == "warehouse_to_truck" {
 		return t.warehouse_to_truck(stub)
@@ -106,6 +112,7 @@ func (t *SimpleChaincode) Invoke(stub shim.ChaincodeStubInterface, function stri
 	} else if function == "local_delivery_to_customer"  {
 		return t.local_delivery_to_customer(stub)
 	}
+	*/
 
 	fmt.Println("invoke did not find func: " + function)					//error
 
