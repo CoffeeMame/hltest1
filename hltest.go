@@ -221,7 +221,7 @@ func (t *SimpleChaincode) create_baggage(stub shim.ChaincodeStubInterface, args 
 	}
 
 	//get the baggage index
-	baggageAsBytes, err := stub.GetState(BAGGAGE_INDEX_STR)
+	baggagesAsBytes, err := stub.GetState(BAGGAGE_INDEX_STR)
 	if err != nil {
 		return nil, errors.New("Failed to get baggage index")
 	}
@@ -230,7 +230,7 @@ func (t *SimpleChaincode) create_baggage(stub shim.ChaincodeStubInterface, args 
 	json.Unmarshal(baggageAsBytes, &baggageIndex)
 
 	//add marble name to index list
-	baggageIndex = append(baggageIndex, name)
+	baggageIndex = append(baggageIndex, ID)
 	fmt.Println("! baggage index: ", baggageIndex)
 	jsonAsBytes, _ := json.Marshal(baggageIndex)
 	//store name of baggage
