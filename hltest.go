@@ -164,10 +164,6 @@ func (t *SimpleChaincode) read(stub shim.ChaincodeStubInterface, args []string) 
 //	 Create Baggage - Creates the initial JSON for the baggage and then saves it to the ledger.
 //=================================================================================================================================
 func (t *SimpleChaincode) create_baggage(stub shim.ChaincodeStubInterface, args []string) ([]byte, error) {
-	var v Baggage
-
-
-
 	var err error
 
 	//   0       1       2     3
@@ -227,10 +223,10 @@ func (t *SimpleChaincode) create_baggage(stub shim.ChaincodeStubInterface, args 
 	}
 	var baggageIndex []string
 	//un stringify it aka JSON.parse()
-	json.Unmarshal(baggageAsBytes, &baggageIndex)
+	json.Unmarshal(baggagesAsBytes, &baggageIndex)
 
 	//add marble name to index list
-	baggageIndex = append(baggageIndex, ID)
+	baggagesIndex = append(baggageIndex, ID)
 	fmt.Println("! baggage index: ", baggageIndex)
 	jsonAsBytes, _ := json.Marshal(baggageIndex)
 	//store name of baggage
