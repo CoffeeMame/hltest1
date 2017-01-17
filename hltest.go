@@ -249,7 +249,7 @@ func (t *SimpleChaincode) first_baggage(stub shim.ChaincodeStubInterface, args [
 		return nil, err
 	}
 
-	err = stub.PutState(BAGGAGE_INDEX_STR, "aaa")
+	err = stub.PutState(BAGGAGE_INDEX_STR, []byte("aaa"))
 	if err != nil {
 		return nil, err
 	}
