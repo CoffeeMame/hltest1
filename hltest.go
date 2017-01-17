@@ -254,7 +254,7 @@ func (t *SimpleChaincode) first_baggage(stub shim.ChaincodeStubInterface, args [
 
 	err = stub.PutState(BAGGAGE_INDEX_STR, []byte("aaa"))
 	if err != nil {
-		return nil, return nil, errors.New("Unable to putstate for the list")
+		return nil, errors.New("Unable to putstate for the list")
 	}
 	return nil, nil
 }
