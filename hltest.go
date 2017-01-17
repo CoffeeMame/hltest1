@@ -79,11 +79,20 @@ func main() {
 }
 
 // Init resets all the things
-func (t *SimpleChaincode) Init(stub shim.ChaincodeStubInterface, function string, args []string) ([]byte, error) {
-	if len(args) != 1 {
-		return nil, errors.New("Incorrect number of arguments. Expecting 1")
+func (t *SimpleChaincode) Init(stub shim.ChaincodeStubInterface, args []string) ([]byte, error) {
+
+	str := `{"ID": "000", "Product": "foo", "TempLimit": "20", "HumLimit": "20", "State": "0"}`
+	res := Baggage{}
+
+	err = stub.PutState("000", []byte(str))									//store marble with id as key
+	if err != nil {
+		return nil, err
 	}
 
+	err = stub.PutState(BAGGAGE_INDEX_STR, "000")
+	if err != nil {
+		return nil, err
+	}
 	return nil, nil
 }
 
@@ -92,7 +101,9 @@ func (t *SimpleChaincode) Invoke(stub shim.ChaincodeStubInterface, function stri
 	fmt.Println("invoke is running " + function)
 
 	// Handle different functions
-	if function == "create_baggage" {
+	if function == "init" {
+		return t.Init(stub, args)
+	}	else if function == "create_baggage" {
 		// Create new baggage
 		return t.create_baggage(stub, args)
 	} else if function == "read" {
