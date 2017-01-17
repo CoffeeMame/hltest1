@@ -79,21 +79,11 @@ func main() {
 }
 
 // Init resets all the things
-func (t *SimpleChaincode) Init(stub shim.ChaincodeStubInterface, args []string) ([]byte, error) {
-	var err error
-
-	str := `{"ID": "aaa", "Product": "foo", "TempLimit": "20", "HumLimit": "20", "State": "0"}`
-	res := Baggage{}
-
-	err = stub.PutState("aaa", []byte(str))
-	if err != nil {
-		return nil, err
+func (t *SimpleChaincode) Init(stub shim.ChaincodeStubInterface, function string,args []string) ([]byte, error) {
+	if len(args) != 1 {
+		return nil, errors.New("Incorrect number of arguments. Expecting 1")
 	}
 
-	err = stub.PutState(BAGGAGE_INDEX_STR, "aaa")
-	if err != nil {
-		return nil, err
-	}
 	return nil, nil
 }
 
@@ -102,13 +92,13 @@ func (t *SimpleChaincode) Invoke(stub shim.ChaincodeStubInterface, function stri
 	fmt.Println("invoke is running " + function)
 
 	// Handle different functions
-	if function == "init" {
-		return t.Init(stub, args)
-	}	else if function == "create_baggage" {
+	if function == "create_baggage" {
 		// Create new baggage
 		return t.create_baggage(stub, args)
 	} else if function == "read" {
 		return t.read(stub, args)
+	} else if function == "first_baggage" {
+		return t.first_baggage(stub, args)
 	}
 
 		/*
@@ -159,8 +149,7 @@ func (t *SimpleChaincode) read(stub shim.ChaincodeStubInterface, args []string) 
 	}
 
 	id = args[0]
-	valAsbytes, err := stub.GetState(id)
-	//get the var from chaincode state
+	valAsbytes, err := stub.GetState(id)									//get the var from chaincode state
 	if err != nil {
 		jsonResp = "{\"Error\":\"Failed to get state for " + id + "\"}"
 		return nil, errors.New(jsonResp)
@@ -246,5 +235,23 @@ func (t *SimpleChaincode) create_baggage(stub shim.ChaincodeStubInterface, args 
 	err = stub.PutState(BAGGAGE_INDEX_STR, jsonAsBytes)
 
 	fmt.Println("- end init baggage")
+	return nil, nil
+}
+
+func (t *SimpleChaincode) first_baggage(stub shim.ChaincodeStubInterface, args []string) ([]byte, error) {
+	var err error
+
+	str := `{"ID": "aaa", "Product": "foo", "TempLimit": "20", "HumLimit": "20", "State": "0"}`
+	res := Baggage{}
+
+	err = stub.PutState("aaa", []byte(str))
+	if err != nil {
+		return nil, err
+	}
+
+	err = stub.PutState(BAGGAGE_INDEX_STR, "aaa")
+	if err != nil {
+		return nil, err
+	}
 	return nil, nil
 }
