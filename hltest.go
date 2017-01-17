@@ -127,6 +127,30 @@ func (t *SimpleChaincode) Query(stub shim.ChaincodeStubInterface, function strin
 }
 
 
+
+// ============================================================================================================================
+// Read - read a variable from chaincode state
+// ============================================================================================================================
+func (t *SimpleChaincode) read(stub shim.ChaincodeStubInterface, args []string) ([]byte, error) {
+	var id, jsonResp string
+	var err error
+
+	if len(args) != 1 {
+		return nil, errors.New("Incorrect number of arguments. Expecting ID of the var to query")
+	}
+
+	id = args[0]
+	valAsbytes, err := stub.GetState(id)									//get the var from chaincode state
+	if err != nil {
+		jsonResp = "{\"Error\":\"Failed to get state for " + id + "\"}"
+		return nil, errors.New(jsonResp)
+	}
+
+	//send it onward
+	return valAsbytes, nil
+}
+
+
 //=================================================================================================================================
 //	 Create Function
 //=================================================================================================================================
