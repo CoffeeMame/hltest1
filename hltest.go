@@ -80,16 +80,17 @@ func main() {
 
 // Init resets all the things
 func (t *SimpleChaincode) Init(stub shim.ChaincodeStubInterface, args []string) ([]byte, error) {
+	var err error
 
-	str := `{"ID": "000", "Product": "foo", "TempLimit": "20", "HumLimit": "20", "State": "0"}`
+	str := `{"ID": "aaa", "Product": "foo", "TempLimit": "20", "HumLimit": "20", "State": "0"}`
 	res := Baggage{}
 
-	err = stub.PutState("000", []byte(str))									//store marble with id as key
+	err = stub.PutState("aaa", []byte(str))
 	if err != nil {
 		return nil, err
 	}
 
-	err = stub.PutState(BAGGAGE_INDEX_STR, "000")
+	err = stub.PutState(BAGGAGE_INDEX_STR, "aaa")
 	if err != nil {
 		return nil, err
 	}
@@ -158,7 +159,8 @@ func (t *SimpleChaincode) read(stub shim.ChaincodeStubInterface, args []string) 
 	}
 
 	id = args[0]
-	valAsbytes, err := stub.GetState(id)									//get the var from chaincode state
+	valAsbytes, err := stub.GetState(id)
+	//get the var from chaincode state
 	if err != nil {
 		jsonResp = "{\"Error\":\"Failed to get state for " + id + "\"}"
 		return nil, errors.New(jsonResp)
