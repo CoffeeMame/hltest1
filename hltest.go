@@ -226,7 +226,7 @@ func (t *SimpleChaincode) create_baggage(stub shim.ChaincodeStubInterface, args 
 	json.Unmarshal(baggagesAsBytes, &baggageIndex)
 
 	//add marble name to index list
-	baggagesIndex = append(baggageIndex, ID)
+	baggageIndex = append(baggageIndex, ID)
 	fmt.Println("! baggage index: ", baggageIndex)
 	jsonAsBytes, _ := json.Marshal(baggageIndex)
 	//store name of baggage
