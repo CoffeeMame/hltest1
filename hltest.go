@@ -158,7 +158,9 @@ func (t *SimpleChaincode) read(stub shim.ChaincodeStubInterface, args []string) 
 	}
 
 	//send it onward
-	return valAsbytes, nil
+	// return valAsbytes, nil
+	return []byte("aaa"), nil
+
 }
 
 
