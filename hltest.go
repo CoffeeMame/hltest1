@@ -245,8 +245,8 @@ func (t *SimpleChaincode) create_baggage(stub shim.ChaincodeStubInterface, args 
 func (t *SimpleChaincode) first_baggage(stub shim.ChaincodeStubInterface, args []string) ([]byte, error) {
 	var err error
 
-	str := `{"ID": "aaa", "Product": "foo", "TempLimit": "20", "HumLimit": "20", "State": "0"}`
-
+	// str := `{"ID": "aaa", "Product": "foo", "TempLimit": "20", "HumLimit": "20", "State": "0"}`
+	str := "test"
 	err = stub.PutState("aaa", []byte(str))
 	if err != nil {
 		return nil, errors.New("Unable to putstate for the fitst")
