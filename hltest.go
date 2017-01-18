@@ -267,17 +267,17 @@ func (t *SimpleChaincode) first_baggage(stub shim.ChaincodeStubInterface, args [
 }
 
 func (t *SimpleChaincode) argtest_zero(stub shim.ChaincodeStubInterface, args []string) ([]byte, error) {
-	retrun []byte(args[0]), nil
+	return []byte(args[0]), nil
 }
 
 func (t *SimpleChaincode) argtest_one(stub shim.ChaincodeStubInterface, args []string) ([]byte, error) {
-	retrun []byte(args[1]), nil
+	return []byte(args[1]), nil
 }
 
 func (t *SimpleChaincode) argtest_two(stub shim.ChaincodeStubInterface, args []string) ([]byte, error) {
-	retrun []byte(args[2]), nil
+	return []byte(args[2]), nil
 }
 
 func (t *SimpleChaincode) argtest_three(stub shim.ChaincodeStubInterface, args []string) ([]byte, error) {
-	retrun []byte(args[3]), nil
+	return []byte(args[3]), nil
 }
