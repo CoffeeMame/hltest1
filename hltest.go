@@ -267,9 +267,9 @@ func (t *SimpleChaincode) first_baggage(stub shim.ChaincodeStubInterface, args [
 }
 
 func (t *SimpleChaincode) argtest_zero(stub shim.ChaincodeStubInterface, args []string) ([]byte, error) {
-	argzerono := args[0]
-	outputzero := argzerono + "desu"
-	return []byte(outputzero), nil
+	id := args[0]
+	//outputzero := id + "desu"
+	return []byte(id), nil
 }
 
 func (t *SimpleChaincode) argtest_one(stub shim.ChaincodeStubInterface, args []string) ([]byte, error) {
