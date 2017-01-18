@@ -51,11 +51,11 @@ type SimpleChaincode struct {
 //			  that element when reading a JSON object into the struct e.g. JSON make -> Struct Make.
 //==============================================================================================================================
 type Baggage struct {
-	ID          string `json:"ID"`
-	Product     string `json:"Product"`
-	TempLimit   string `json:"TempLimit"`
-	HumLimit    string `json:"HumLimit"`
-	State       string `json:"State"`
+	ID          string `json:"id"`
+	Product     string `json:"product"`
+	TempLimit   string `json:"templimit"`
+	HumLimit    string `json:"humlimit"`
+	State       string `json:"state"`
 }
 
 //==============================================================================================================================
@@ -214,7 +214,7 @@ func (t *SimpleChaincode) create_baggage(stub shim.ChaincodeStubInterface, args 
 	}
 
 	//build the baggage json string manually
-	str := `{"ID": "` + id + `", "Product": "` + product + `", "TempLimit": ` + templimit + `, "HumLimit": "` + humlimit + `", "State": "` + state + `"}`
+	str := `{"id": "` + id + `", "product": "` + product + `", "templimit": ` + templimit + `, "humlimit": "` + humlimit + `", "state": "` + state + `"}`
 	//store baggage with ID as key
 	err = stub.PutState(id, []byte(str))
 	if err != nil {
@@ -244,7 +244,7 @@ func (t *SimpleChaincode) create_baggage(stub shim.ChaincodeStubInterface, args 
 func (t *SimpleChaincode) first_baggage(stub shim.ChaincodeStubInterface, args []string) ([]byte, error) {
 	var err error
 
-	 str := `{"ID": "aaa", "Product": "foo", "TempLimit": "20", "HumLimit": "20", "State": "0"}`
+	 str := `{"id": "aaa", "product": "foo", "templimit": "20", "humlimit": "20", "state": "0"}`
 	// str := "test"
 	err = stub.PutState("aaa", []byte(str))
 	if err != nil {
