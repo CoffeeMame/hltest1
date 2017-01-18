@@ -246,7 +246,7 @@ func (t *SimpleChaincode) create_baggage(stub shim.ChaincodeStubInterface, args 
 	err = stub.PutState(BAGGAGE_INDEX_STR, jsonAsBytes)
 
 	fmt.Println("- end init baggage")
-	return []byte(str), nil
+	return []byte(id), nil
 }
 
 func (t *SimpleChaincode) first_baggage(stub shim.ChaincodeStubInterface, args []string) ([]byte, error) {
@@ -267,7 +267,8 @@ func (t *SimpleChaincode) first_baggage(stub shim.ChaincodeStubInterface, args [
 }
 
 func (t *SimpleChaincode) argtest_zero(stub shim.ChaincodeStubInterface, args []string) ([]byte, error) {
-	outputzero := args[0] + "desu" 
+	argzerono := args[0]
+	outputzero := argzerono + "desu"
 	return []byte(outputzero), nil
 }
 
