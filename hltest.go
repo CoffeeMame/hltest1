@@ -172,8 +172,6 @@ func (t *SimpleChaincode) read(stub shim.ChaincodeStubInterface, args []string) 
 func (t *SimpleChaincode) create_baggage(stub shim.ChaincodeStubInterface, args []string) ([]byte, error) {
 	var err error
 
-	//   0       1       2     3
-	// "asdf", "blue", "35", "bob"
 	if len(args) != 5 {
 		return nil, errors.New("Incorrect number of arguments. Expecting 4")
 	}
@@ -239,14 +237,14 @@ func (t *SimpleChaincode) create_baggage(stub shim.ChaincodeStubInterface, args 
 	err = stub.PutState(BAGGAGE_INDEX_STR, jsonAsBytes)
 
 	fmt.Println("- end init baggage")
-	return nil, nil
+	return []byte(str), nil
 }
 
 func (t *SimpleChaincode) first_baggage(stub shim.ChaincodeStubInterface, args []string) ([]byte, error) {
 	var err error
 
-	// str := `{"ID": "aaa", "Product": "foo", "TempLimit": "20", "HumLimit": "20", "State": "0"}`
-	str := "test"
+	 str := `{"ID": "aaa", "Product": "foo", "TempLimit": "20", "HumLimit": "20", "State": "0"}`
+	// str := "test"
 	err = stub.PutState("aaa", []byte(str))
 	if err != nil {
 		return nil, errors.New("Unable to putstate for the fitst")
