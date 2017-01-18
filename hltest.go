@@ -132,6 +132,14 @@ func (t *SimpleChaincode) Query(stub shim.ChaincodeStubInterface, function strin
 	} else if function == "read" {
 		return t.read(stub, args)
 		// return []byte("hogefoobaa"), nil
+	} else if function == "argtest_zero" {
+		return t.argtest_zero(stub, args)
+	} else if function == "argtest_one" {
+		return t.argtest_one(stub, args)
+	} else if function == "argtest_two" {
+		return t.argtest_two(stub, args)
+	} else if function == "argtest_three" {
+		return t.argtest_three(stub, args)
 	}
 	fmt.Println("query did not find func: " + function)						//error
 
@@ -256,4 +264,20 @@ func (t *SimpleChaincode) first_baggage(stub shim.ChaincodeStubInterface, args [
 		return nil, errors.New("Unable to putstate for the list")
 	}
 	return nil, nil
+}
+
+func (t *SimpleChaincode) argtest_zero(stub shim.ChaincodeStubInterface, args []string) ([]byte, error) {
+	retrun []byte(args[0]), nil
+}
+
+func (t *SimpleChaincode) argtest_one(stub shim.ChaincodeStubInterface, args []string) ([]byte, error) {
+	retrun []byte(args[1]), nil
+}
+
+func (t *SimpleChaincode) argtest_two(stub shim.ChaincodeStubInterface, args []string) ([]byte, error) {
+	retrun []byte(args[2]), nil
+}
+
+func (t *SimpleChaincode) argtest_three(stub shim.ChaincodeStubInterface, args []string) ([]byte, error) {
+	retrun []byte(args[3]), nil
 }
