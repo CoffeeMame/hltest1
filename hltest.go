@@ -170,6 +170,7 @@ func (t *SimpleChaincode) read(stub shim.ChaincodeStubInterface, args []string) 
 //	 Create Baggage - Creates the initial JSON for the baggage and then saves it to the ledger.
 //=================================================================================================================================
 func (t *SimpleChaincode) create_baggage(stub shim.ChaincodeStubInterface, args []string) ([]byte, error) {
+	var id, product, templimit, humlimit, state string
 	var err error
 
 	if len(args) != 5 {
@@ -192,30 +193,30 @@ func (t *SimpleChaincode) create_baggage(stub shim.ChaincodeStubInterface, args 
 	}
 
 	// Variables to define the JSON
-	ID         := args[0]
-	Product    := args[1]
-	TempLimit  := args[2]
-	HumLimit   := args[3]
-	State      := "0"
+	id = args[0]
+	product = args[1]
+	templimit = args[2]
+	humlimit = args[3]
+	state = "0"
 
 	//check if baggage already exists
-	baggageAsBytes, err := stub.GetState(ID)
+	baggageAsBytes, err := stub.GetState(id)
 	if err != nil {
 		return nil, errors.New("Failed to get baggage name")
 	}
 	res := Baggage{}
 	json.Unmarshal(baggageAsBytes, &res)
-	if res.ID == ID{
-		fmt.Println("This baggage arleady exists: " + ID)
+	if res.id == id{
+		fmt.Println("This baggage arleady exists: " + id)
 		fmt.Println(res);
 		//all stop a baggage by this ID exists
 		return nil, errors.New("This baggage arleady exists")
 	}
 
 	//build the baggage json string manually
-	str := `{"ID": "` + ID + `", "Product": "` + Product + `", "TempLimit": ` + TempLimit + `, "HumLimit": "` + HumLimit + `", "State": "` + State + `"}`
+	str := `{"ID": "` + id + `", "Product": "` + product + `", "TempLimit": ` + templimit + `, "HumLimit": "` + humlimit + `", "State": "` + state + `"}`
 	//store baggage with ID as key
-	err = stub.PutState(ID, []byte(str))
+	err = stub.PutState(id, []byte(str))
 	if err != nil {
 		return nil, err
 	}
@@ -230,7 +231,7 @@ func (t *SimpleChaincode) create_baggage(stub shim.ChaincodeStubInterface, args 
 	json.Unmarshal(baggagesAsBytes, &baggageIndex)
 
 	//add marble name to index list
-	baggageIndex = append(baggageIndex, ID)
+	baggageIndex = append(baggageIndex, id)
 	fmt.Println("! baggage index: ", baggageIndex)
 	jsonAsBytes, _ := json.Marshal(baggageIndex)
 	//store name of baggage
