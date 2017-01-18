@@ -6,7 +6,7 @@ import (
 	"github.com/hyperledger/fabric/core/chaincode/shim"
 	"encoding/json"
 //	"strconv"
-//	"strings"
+	"strings"
 //	"regexp"
 )
 
@@ -206,7 +206,7 @@ func (t *SimpleChaincode) create_baggage(stub shim.ChaincodeStubInterface, args 
 	}
 	res := Baggage{}
 	json.Unmarshal(baggageAsBytes, &res)
-	if res.id == id{
+	if res.ID == id{
 		fmt.Println("This baggage arleady exists: " + id)
 		fmt.Println(res);
 		//all stop a baggage by this ID exists
