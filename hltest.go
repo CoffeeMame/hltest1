@@ -181,7 +181,7 @@ func (t *SimpleChaincode) create_baggage(stub shim.ChaincodeStubInterface, args 
 	var id, product, templimit, humlimit, state, str string
 	var err error
 
-	if len(args) != 5 {
+	if len(args) != 4 {
 		return nil, errors.New("Incorrect number of arguments. Expecting 4")
 	}
 
