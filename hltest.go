@@ -298,7 +298,7 @@ func (t *SimpleChaincode) local_delivery_to_customer(stub shim.ChaincodeStubInte
 // ============================================================================================================================
 func (t *SimpleChaincode) change_state(stub shim.ChaincodeStubInterface, args []string) ([]byte, error) {
 	var id, prestate, poststate string
-	var tempVal, humVal int
+	var TempLimitVal, HumLimitVal, tempVal, humVal int
 	var err error
 
 	if len(args) != 5 {
@@ -353,15 +353,15 @@ func (t *SimpleChaincode) change_state(stub shim.ChaincodeStubInterface, args []
 
 	HumLimitVal, err = strconv.Atoi(res.TempLimit)
 	if err != nil {
-		return nil, errors.new("Expecting integer value")
+		return nil, errors.New("Expecting integer value")
 	}
 
 	if TempLimitVal < tempVal {
-		return nil, errors.new("Temp Over")
+		return nil, errors.New("Temp Over")
 	}
 
 	if HumLimitVal < humVal {
-		return nil, errors.new("Hum Over")
+		return nil, errors.New("Hum Over")
 	}
 
 	// 状態を更新
