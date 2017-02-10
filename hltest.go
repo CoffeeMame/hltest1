@@ -246,13 +246,61 @@ func (t *SimpleChaincode) create_baggage(stub shim.ChaincodeStubInterface, args 
 
 
 // ============================================================================================================================
-// Warehouse_to_Truck - 倉庫からトラックに荷物を引き渡す
+// Warehouse to Truck - 倉庫からトラックに荷物を引き渡す
 // ============================================================================================================================
 func (t *SimpleChaincode) warehouse_to_truck(stub shim.ChaincodeStubInterface, args []string) ([]byte, error) {
-	var id, temp, hum string
+
+	args = append(args, STATE_WAREHOUSE)
+	args = append(args, STATE_TRUCK)
+　return t.change_state(stub, args)
+
+}
+
+
+// ============================================================================================================================
+// Truck to Local Depo - トラックから地元の倉庫に荷物を引き渡す
+// ============================================================================================================================
+func (t *SimpleChaincode) truck_to_local_depo(stub shim.ChaincodeStubInterface, args []string) ([]byte, error) {
+
+	args = append(args, STATE_TRUCK)
+	args = append(args, STATE_LOCAL_DEPO)
+　return t.change_state(stub, args)
+
+}
+
+
+// ============================================================================================================================
+// Local Depo to Local Delivery - 地元の倉庫から地元の配送業者に荷物を引き渡す
+// ============================================================================================================================
+func (t *SimpleChaincode) local_depo_to_local_delivery(stub shim.ChaincodeStubInterface, args []string) ([]byte, error) {
+
+	args = append(args, STATE_LOCAL_DEPO)
+	args = append(args, STATE_LOCAL_DELIVERY)
+　return t.change_state(stub, args)
+
+}
+
+
+// ============================================================================================================================
+// Local Delivery to Customer - 地元の配送業者から顧客に荷物を引き渡す
+// ============================================================================================================================
+func (t *SimpleChaincode) local_delivery_to_customer(stub shim.ChaincodeStubInterface, args []string) ([]byte, error) {
+
+	args = append(args, STATE_LOCAL_DELIVERY)
+	args = append(args, STATE_CUSTOMER)
+　return t.change_state(stub, args)
+
+}
+
+
+// ============================================================================================================================
+// Change State - 荷物の状態を更新する
+// ============================================================================================================================
+func (t *SimpleChaincode) change_state(stub shim.ChaincodeStubInterface, args []string) ([]byte, error) {
+	var id, temp, hum, prestate, poststate string
 	var err error
 
-	if len(args) != 3 {
+	if len(args) != 5 {
 		return nil, errors.New("Incorrect number of arguments. Expecting 4")
 	}
 
@@ -265,12 +313,21 @@ func (t *SimpleChaincode) warehouse_to_truck(stub shim.ChaincodeStubInterface, a
 	if len(args[2]) <= 0 {
 		return nil, errors.New("3rd argument must be a non-empty string")
 	}
+	if len(args[3]) <= 0 {
+		return nil, errors.New("3rd argument must be a non-empty string")
+	}
+	if len(args[4]) <= 0 {
+		return nil, errors.New("3rd argument must be a non-empty string")
+	}
 
 	id = args[0]
 	temp = args[1]
 	hum = args[2]
+	prestate = args[3]
+	poststate = args[4]
 	// 存在チェック
 	// 指定されたIDが存在しない場合にエラー
+	// ======未実装======
 
 	// baggage情報の取り出し
 	baggageAsBytes, err := stub.GetState(id)
@@ -281,20 +338,22 @@ func (t *SimpleChaincode) warehouse_to_truck(stub shim.ChaincodeStubInterface, a
 	json.Unmarshal(baggageAsBytes, &res)
 
 	// 現在の状態をチェック
-	// stateが0でない場合はエラー
-	if res.state != "0" {
+	// Stateが0でない場合はエラー
+	if res.State != prestate {
 		return nil, errors.New("This baggage can not be accepted")
 	}
 
+	// 温度と湿度のチェック
+	// ======未実装======
+
 	// 状態を更新
-	res.state = "1"
+	res.State = poststate
 	// 台帳への書き込み
 	jsonAsBytes, _ := json.Marshal(id)
 	err = stub.PutState(id, jsonAsBytes)
 
 	return nil, nil
 }
-
 
 /* Debugging function */
 // ============================================================================================================================
