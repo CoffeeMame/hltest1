@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"github.com/hyperledger/fabric/core/chaincode/shim"
 	"encoding/json"
-//	"strconv"
+	"strconv"
 //	"strings"
 //	"regexp"
 )
@@ -297,7 +297,8 @@ func (t *SimpleChaincode) local_delivery_to_customer(stub shim.ChaincodeStubInte
 // Change State - 荷物の状態を更新する
 // ============================================================================================================================
 func (t *SimpleChaincode) change_state(stub shim.ChaincodeStubInterface, args []string) ([]byte, error) {
-	var id, temp, hum, prestate, poststate string
+	var id, prestate, poststate string
+	var tempVal, humVal int
 	var err error
 
 	if len(args) != 5 {
@@ -321,8 +322,8 @@ func (t *SimpleChaincode) change_state(stub shim.ChaincodeStubInterface, args []
 	}
 
 	id = args[0]
-	temp = args[1]
-	hum = args[2]
+	tempVal, err = strconv.Atoi(args[1])
+	humVal, err = strconv.Atoi(args[2])
 	prestate = args[3]
 	poststate = args[4]
 	// 存在チェック
@@ -344,7 +345,24 @@ func (t *SimpleChaincode) change_state(stub shim.ChaincodeStubInterface, args []
 	}
 
 	// 温度と湿度のチェック
-	// ======未実装======
+	//
+	TempLimitVal, err = strconv.Atoi(res.TempLimit)
+	if err != nil {
+		return nil, errors.New("Expecting integer value")
+	}
+
+	HumLimitVal, err = strconv.Atoi(res.TempLimit)
+	if err != nil {
+		return nil, errors.new("Expecting integer value")
+	}
+
+	if TempLimitVal < tempVal {
+		return nil, errors.new("Temp Over")
+	}
+
+	if HumLimitVal < humVal {
+		return nil, errors.new("Hum Over")
+	}
 
 	// 状態を更新
 	res.State = poststate
