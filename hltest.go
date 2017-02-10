@@ -95,28 +95,22 @@ func (t *SimpleChaincode) Invoke(stub shim.ChaincodeStubInterface, function stri
 	if function == "create_baggage" {
 		// Create new baggage
 		return t.create_baggage(stub, args)
-	} else if function == "read" {
-		return t.read(stub, args)
-	} else if function == "first_baggage" {
-		return t.first_baggage(stub, args)
+	} else if function == "warehouse_to_truck" {
+		return t.warehouse_to_truck(stub, args)
+	} else if function == "truck_to_local_depo" {
+		return t.truck_to_local_depo(stub, args)
+	} else if function == "local_depo_to_local_delivery" {
+		return t.local_depo_to_local_delivery(stub, args)
+	} else if function == "local_delivery_to_customer" {
+		return t.local_delivery_to_customer(stub, args)
 	}
 
 		/*
-		return t.create_baggage(stub, args)
-	} else if function == "baggage_confirmation" {
+		else if function == "baggage_confirmation" {
 		return t.luggage_confirmation(stub)
-	} else if function == "warehouse_to_truck" {
-		return t.warehouse_to_truck(stub)
-	} else if function == "truck_to_local_depo" {
-		return t.truck_to_local_depo(stub)
-	} else if function == "local_depo_to_local_delivery" {
-		return t.local_depo_to_local_delivery(stub)
-	} else if function == "local_delivery_to_customer"  {
-		return t.local_delivery_to_customer(stub)
-	}
 	*/
 
-	fmt.Println("invoke did not find func: " + function)					//error
+	fmt.Println("invoke did not find func: " + function)
 
 	return nil, errors.New("Received unknown function invocation: " + function)
 }
@@ -166,6 +160,7 @@ func (t *SimpleChaincode) read(stub shim.ChaincodeStubInterface, args []string) 
 		return nil, errors.New(jsonResp)
 	}
 
+
 	//send it onward
 	return valAsbytes, nil
 
@@ -186,7 +181,7 @@ func (t *SimpleChaincode) create_baggage(stub shim.ChaincodeStubInterface, args 
 	}
 
 	//input sanitation
-	fmt.Println("- start init marble")
+	fmt.Println("- start create baggage")
 	if len(args[0]) <= 0 {
 		return nil, errors.New("1st argument must be a non-empty string")
 	}
@@ -214,7 +209,7 @@ func (t *SimpleChaincode) create_baggage(stub shim.ChaincodeStubInterface, args 
 	}
 	res := Baggage{}
 	json.Unmarshal(baggageAsBytes, &res)
-	if res.ID == id{
+	if res.ID == id {
 		fmt.Println("This baggage arleady exists: " + id)
 		fmt.Println(res);
 		//all stop a baggage by this ID exists
@@ -235,20 +230,74 @@ func (t *SimpleChaincode) create_baggage(stub shim.ChaincodeStubInterface, args 
 		return nil, errors.New("Failed to get baggage index")
 	}
 	var baggageIndex []string
-	//un stringify it aka JSON.parse()
+	// un stringify it aka JSON.parse()
 	json.Unmarshal(baggagesAsBytes, &baggageIndex)
 
-	//add marble name to index list
+	// add marble name to index list
 	baggageIndex = append(baggageIndex, id)
 	fmt.Println("! baggage index: ", baggageIndex)
 	jsonAsBytes, _ := json.Marshal(baggageIndex)
-	//store name of baggage
+	// store name of baggage
 	err = stub.PutState(BAGGAGE_INDEX_STR, jsonAsBytes)
 
 	fmt.Println("- end init baggage")
 	return []byte(args[0]), nil
 }
 
+
+// ============================================================================================================================
+// Warehouse_to_Truck - 倉庫からトラックに荷物を引き渡す
+// ============================================================================================================================
+func (t *SimpleChaincode) warehouse_to_truck(stub shim.ChaincodeStubInterface, args []string) ([]byte, error) {
+	var id, temp, hum string
+	var err error
+
+	if len(args) != 3 {
+		return nil, errors.New("Incorrect number of arguments. Expecting 4")
+	}
+
+	if len(args[0]) <= 0 {
+		return nil, errors.New("1st argument must be a non-empty string")
+	}
+	if len(args[1]) <= 0 {
+		return nil, errors.New("2nd argument must be a non-empty string")
+	}
+	if len(args[2]) <= 0 {
+		return nil, errors.New("3rd argument must be a non-empty string")
+	}
+
+	id = args[0]
+	temp = args[1]
+	hum = args[2]
+	// 存在チェック
+	// 指定されたIDが存在しない場合にエラー
+
+	// baggage情報の取り出し
+	baggageAsBytes, err := stub.GetState(id)
+	if err != nil {
+		return nil, errors.New("Failed to get baggage info")
+	}
+	res := Baggage{}
+	json.Unmarshal(baggageAsBytes, &res)
+
+	// 現在の状態をチェック
+	// stateが0でない場合はエラー
+	if res.state != "0" {
+		return nil, errors.New("This baggage can not be accepted")
+	}
+
+	// 状態を更新
+	res.state = "1"
+	// 台帳への書き込み
+	jsonAsBytes, _ := json.Marshal(id)
+	err = stub.PutState(id, jsonAsBytes)
+
+	return nil, nil
+}
+
+
+/* Debugging function */
+// ============================================================================================================================
 func (t *SimpleChaincode) first_baggage(stub shim.ChaincodeStubInterface, args []string) ([]byte, error) {
 	var err error
 
