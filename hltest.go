@@ -252,7 +252,7 @@ func (t *SimpleChaincode) warehouse_to_truck(stub shim.ChaincodeStubInterface, a
 
 	args = append(args, STATE_WAREHOUSE)
 	args = append(args, STATE_TRUCK)
-　return t.change_state(stub, args)
+  return t.change_state(stub, args)
 
 }
 
@@ -264,7 +264,7 @@ func (t *SimpleChaincode) truck_to_local_depo(stub shim.ChaincodeStubInterface, 
 
 	args = append(args, STATE_TRUCK)
 	args = append(args, STATE_LOCAL_DEPO)
-　return t.change_state(stub, args)
+  return t.change_state(stub, args)
 
 }
 
@@ -276,7 +276,7 @@ func (t *SimpleChaincode) local_depo_to_local_delivery(stub shim.ChaincodeStubIn
 
 	args = append(args, STATE_LOCAL_DEPO)
 	args = append(args, STATE_LOCAL_DELIVERY)
-　return t.change_state(stub, args)
+  return t.change_state(stub, args)
 
 }
 
@@ -288,7 +288,7 @@ func (t *SimpleChaincode) local_delivery_to_customer(stub shim.ChaincodeStubInte
 
 	args = append(args, STATE_LOCAL_DELIVERY)
 	args = append(args, STATE_CUSTOMER)
-　return t.change_state(stub, args)
+  return t.change_state(stub, args)
 
 }
 
