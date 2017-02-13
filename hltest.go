@@ -342,38 +342,35 @@ func (t *SimpleChaincode) change_state(stub shim.ChaincodeStubInterface, args []
 	if res.State != prestate {
 		return nil, errors.New("This baggage can not be accepted")
 	}
-/*
+
 	// 温度と湿度のチェック
 	//
 	TempLimitVal, err = strconv.Atoi(res.TempLimit)
 	if err != nil {
-		// return nil, errors.New("Expecting integer value")
-		return []byte("hoge9"), nil
+		return nil, errors.New("Expecting integer value")
 	}
 
 	HumLimitVal, err = strconv.Atoi(res.HumLimit)
 	if err != nil {
-		// return nil, errors.New("Expecting integer value")
-		return []byte("hoge10"), nil
+		return nil, errors.New("Expecting integer value")
 	}
 
 	if TempLimitVal < tempVal {
 		// return nil, errors.New("Temp Over")
-		return []byte("hoge11"), nil
+
 	}
 
 	if HumLimitVal < humVal {
 		// return nil, errors.New("Hum Over")
-		return []byte("hoge12"), nil
 	}
-*/
+
 	// 状態を更新
 	res.State = poststate
 	// 台帳への書き込み
 	jsonAsBytes, _ := json.Marshal(res)
 	err = stub.PutState(id, jsonAsBytes)
 
-	return []byte("hoge13"), nil
+	return nil, nil
 
 }
 
