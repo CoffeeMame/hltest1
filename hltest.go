@@ -367,7 +367,7 @@ func (t *SimpleChaincode) change_state(stub shim.ChaincodeStubInterface, args []
 	// 状態を更新
 	res.State = poststate
 	// 台帳への書き込み
-	jsonAsBytes, _ := json.Marshal(id)
+	jsonAsBytes, _ := json.Marshal(res)
 	err = stub.PutState(id, jsonAsBytes)
 
 	return nil, nil
