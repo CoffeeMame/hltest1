@@ -360,11 +360,11 @@ func (t *SimpleChaincode) change_state(stub shim.ChaincodeStubInterface, args []
 	}
 
 	if TempLimitVal < tempVal {
-		// return nil, errors.New("Temp Over")
+		return nil, errors.New("Temp Over")
 	}
 
 	if HumLimitVal < humVal {
-		// return nil, errors.New("Hum Over")
+		return nil, errors.New("Hum Over")
 	}
 
 
