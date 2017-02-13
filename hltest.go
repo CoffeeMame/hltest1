@@ -217,7 +217,7 @@ func (t *SimpleChaincode) create_baggage(stub shim.ChaincodeStubInterface, args 
 	}
 
 	//build the baggage json string manually
-	str = `{"id": "` + id + `", "product": "` + product + `", "templimit": ` + templimit + `, "humlimit": "` + humlimit + `", "state": "` + state + `"}`
+	str = `{"id": "` + id + `", "product": "` + product + `", "templimit": "` + templimit + `", "humlimit": "` + humlimit + `", "state": "` + state + `"}`
 	//store baggage with ID as key
 	err = stub.PutState(id, []byte(str))
 	if err != nil {
