@@ -257,9 +257,9 @@ func (t *SimpleChaincode) delete_baggage(stub shim.ChaincodeStubInterface, args 
 	// IDのスライスから削除
 	indexslice, err = stub.GetState(BAGGAGE_INDEX_STR)
 	s := make([]byte, len(indexslice) - 1 )
-	for i := 0; len(indexslice); i++ {
-		if indexslice == args[0] {
-			s.append(indexslice[i])
+	for i := 0; i < len(indexslice); i++ {
+		if indexslice[i] == args[0] {
+			s = append(s, indexslice[i])
 		}
 	}
 	err = stub.PutState(BAGGAGE_INDEX_STR, s)
