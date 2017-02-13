@@ -254,11 +254,14 @@ func (t *SimpleChaincode) delete_baggage(stub shim.ChaincodeStubInterface, args 
 	}
 
 	// IDのスライスから削除
-	indexslice, _ := stub.GetState(BAGGAGE_INDEX_STR)
-	s := make([]string, len(indexslice) - 1 )
-	for i := 0; i < len(indexslice); i++ {
-		if string(indexslice[i]) != args[0] {
-			s = append(s, string(indexslice[i]))
+	baggagesAsBytes, _ := stub.GetState(BAGGAGE_INDEX_STR)
+	var baggageIndex []string
+	json.Unmarshal(baggagesAsBytes, &baggageIndex)
+
+  var s []string
+	for i := 0; i < len(baggageIndex); i++ {
+		if string(baggageIndex[i]) != args[0] {
+			s = append(s, baggageIndex[i])
 		}
 	}
 	jsonAsBytes, _ := json.Marshal(s)
