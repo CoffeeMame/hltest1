@@ -297,7 +297,8 @@ func (t *SimpleChaincode) local_delivery_to_customer(stub shim.ChaincodeStubInte
 // Change State - 荷物の状態を更新する
 // ============================================================================================================================
 func (t *SimpleChaincode) change_state(stub shim.ChaincodeStubInterface, args []string) ([]byte, error) {
-	var id, prestate, poststate string
+	// var id, prestate, poststate string
+	var id, poststate string
 	// var TempLimitVal, HumLimitVal, tempVal, humVal int
 	// var tempVal, humVal int
 	var err error
@@ -340,9 +341,11 @@ func (t *SimpleChaincode) change_state(stub shim.ChaincodeStubInterface, args []
 
 	// 現在の状態をチェック
 	// Stateが0でない場合はエラー
+	/*
 	if res.State != prestate {
 		return nil, errors.New("This baggage can not be accepted")
 	}
+	*/
 
 	// 温度と湿度のチェック
 	//
