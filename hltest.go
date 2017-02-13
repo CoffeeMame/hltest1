@@ -302,23 +302,23 @@ func (t *SimpleChaincode) change_state(stub shim.ChaincodeStubInterface, args []
 	var err error
 
 	if len(args) != 5 {
-		return nil, errors.New("Incorrect number of arguments. Expecting 4")
+		return []byte("hoge1"), errors.New("Incorrect number of arguments. Expecting 5")
 	}
 
 	if len(args[0]) <= 0 {
-		return nil, errors.New("1st argument must be a non-empty string")
+		return []byte("hoge2"), errors.New("1st argument must be a non-empty string")
 	}
 	if len(args[1]) <= 0 {
-		return nil, errors.New("2nd argument must be a non-empty string")
+		return []byte("hoge3"), errors.New("2nd argument must be a non-empty string")
 	}
 	if len(args[2]) <= 0 {
-		return nil, errors.New("3rd argument must be a non-empty string")
+		return []byte("hoge4"), errors.New("3rd argument must be a non-empty string")
 	}
 	if len(args[3]) <= 0 {
-		return nil, errors.New("3rd argument must be a non-empty string")
+		return []byte("hoge5"), errors.New("4th argument must be a non-empty string")
 	}
 	if len(args[4]) <= 0 {
-		return nil, errors.New("3rd argument must be a non-empty string")
+		return []byte("hoge6"), errors.New("5th argument must be a non-empty string")
 	}
 
 	id = args[0]
@@ -333,7 +333,7 @@ func (t *SimpleChaincode) change_state(stub shim.ChaincodeStubInterface, args []
 	// baggage情報の取り出し
 	baggageAsBytes, err := stub.GetState(id)
 	if err != nil {
-		return nil, errors.New("Failed to get baggage info")
+		return []byte("hoge7"), errors.New("Failed to get baggage info")
 	}
 	res := Baggage{}
 	json.Unmarshal(baggageAsBytes, &res)
@@ -341,27 +341,27 @@ func (t *SimpleChaincode) change_state(stub shim.ChaincodeStubInterface, args []
 	// 現在の状態をチェック
 	// Stateが0でない場合はエラー
 	if res.State != prestate {
-		return nil, errors.New("This baggage can not be accepted")
+		return []byte("hoge8"), errors.New("This baggage can not be accepted")
 	}
 
 	// 温度と湿度のチェック
 	//
 	TempLimitVal, err = strconv.Atoi(res.TempLimit)
 	if err != nil {
-		return nil, errors.New("Expecting integer value")
+		return []byte("hoge9"), errors.New("Expecting integer value")
 	}
 
 	HumLimitVal, err = strconv.Atoi(res.TempLimit)
 	if err != nil {
-		return nil, errors.New("Expecting integer value")
+		return []byte("hoge10"), errors.New("Expecting integer value")
 	}
 
 	if TempLimitVal < tempVal {
-		return nil, errors.New("Temp Over")
+		return []byte("hoge11"), errors.New("Temp Over")
 	}
 
 	if HumLimitVal < humVal {
-		return nil, errors.New("Hum Over")
+		return []byte("hoge12"), errors.New("Hum Over")
 	}
 
 	// 状態を更新
@@ -370,7 +370,7 @@ func (t *SimpleChaincode) change_state(stub shim.ChaincodeStubInterface, args []
 	jsonAsBytes, _ := json.Marshal(res)
 	err = stub.PutState(id, jsonAsBytes)
 
-	return nil, nil
+	return []byte("hoge13"), nil
 }
 
 /* Debugging function */
