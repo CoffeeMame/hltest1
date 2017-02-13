@@ -347,12 +347,12 @@ func (t *SimpleChaincode) change_state(stub shim.ChaincodeStubInterface, args []
 	//
 	TempLimitVal, err = strconv.Atoi(res.TempLimit)
 	if err != nil {
-		return nil, errors.New("Expecting integer value")
+		// return nil, errors.New("Expecting integer value")
 	}
 
 	HumLimitVal, err = strconv.Atoi(res.HumLimit)
 	if err != nil {
-		return nil, errors.New("Expecting integer value")
+		// return nil, errors.New("Expecting integer value")
 	}
 
 	if TempLimitVal < tempVal {
