@@ -105,11 +105,6 @@ func (t *SimpleChaincode) Invoke(stub shim.ChaincodeStubInterface, function stri
 		return t.local_delivery_to_customer(stub, args)
 	}
 
-		/*
-		else if function == "baggage_confirmation" {
-		return t.luggage_confirmation(stub)
-	*/
-
 	fmt.Println("invoke did not find func: " + function)
 
 	return nil, errors.New("Received unknown function invocation: " + function)
@@ -120,22 +115,13 @@ func (t *SimpleChaincode) Query(stub shim.ChaincodeStubInterface, function strin
 	fmt.Println("query is running " + function)
 
 	// Handle different functions
-	if function == "dummy_query" {											//read a variable
-		fmt.Println("hi there " + function)						//error
-		return nil, nil;
+	if function == "dummy_query" {
+		fmt.Println("hi there " + function)
+		return nil, nil
 	} else if function == "read" {
 		return t.read(stub, args)
-		// return []byte("hogefoobaa"), nil
-	} else if function == "argtest_zero" {
-		return t.argtest_zero(stub, args)
-	} else if function == "argtest_one" {
-		return t.argtest_one(stub, args)
-	} else if function == "argtest_two" {
-		return t.argtest_two(stub, args)
-	} else if function == "argtest_three" {
-		return t.argtest_three(stub, args)
 	}
-	fmt.Println("query did not find func: " + function)						//error
+	fmt.Println("query did not find func: " + function)
 
 	return nil, errors.New("Received unknown function query: " + function)
 }
@@ -249,49 +235,37 @@ func (t *SimpleChaincode) create_baggage(stub shim.ChaincodeStubInterface, args 
 // Warehouse to Truck - 倉庫からトラックに荷物を引き渡す
 // ============================================================================================================================
 func (t *SimpleChaincode) warehouse_to_truck(stub shim.ChaincodeStubInterface, args []string) ([]byte, error) {
-
 	args = append(args, STATE_WAREHOUSE)
 	args = append(args, STATE_TRUCK)
   return t.change_state(stub, args)
-
 }
-
 
 // ============================================================================================================================
 // Truck to Local Depo - トラックから地元の倉庫に荷物を引き渡す
 // ============================================================================================================================
 func (t *SimpleChaincode) truck_to_local_depo(stub shim.ChaincodeStubInterface, args []string) ([]byte, error) {
-
 	args = append(args, STATE_TRUCK)
 	args = append(args, STATE_LOCAL_DEPO)
   return t.change_state(stub, args)
-
 }
-
 
 // ============================================================================================================================
 // Local Depo to Local Delivery - 地元の倉庫から地元の配送業者に荷物を引き渡す
 // ============================================================================================================================
 func (t *SimpleChaincode) local_depo_to_local_delivery(stub shim.ChaincodeStubInterface, args []string) ([]byte, error) {
-
 	args = append(args, STATE_LOCAL_DEPO)
 	args = append(args, STATE_LOCAL_DELIVERY)
   return t.change_state(stub, args)
-
 }
-
 
 // ============================================================================================================================
 // Local Delivery to Customer - 地元の配送業者から顧客に荷物を引き渡す
 // ============================================================================================================================
 func (t *SimpleChaincode) local_delivery_to_customer(stub shim.ChaincodeStubInterface, args []string) ([]byte, error) {
-
 	args = append(args, STATE_LOCAL_DELIVERY)
 	args = append(args, STATE_CUSTOMER)
   return t.change_state(stub, args)
-
 }
-
 
 // ============================================================================================================================
 // Change State - 荷物の状態を更新する
@@ -345,10 +319,7 @@ func (t *SimpleChaincode) change_state(stub shim.ChaincodeStubInterface, args []
 		return nil, errors.New("This baggage can not be accepted")
 	}
 
-
 	// 温度と湿度のチェック
-	//
-
 	TempLimitVal, err = strconv.Atoi(res.TempLimit)
 	if err != nil {
 		return nil, errors.New("Expecting integer value")
@@ -367,11 +338,6 @@ func (t *SimpleChaincode) change_state(stub shim.ChaincodeStubInterface, args []
 		return nil, errors.New("Hum Over")
 	}
 
-
-	//if tempVal < humVal {
-		//
-	//}
-
 	// 状態を更新
 	res.State = poststate
 	// 台帳への書き込み
@@ -380,41 +346,4 @@ func (t *SimpleChaincode) change_state(stub shim.ChaincodeStubInterface, args []
 
 	return nil, nil
 
-}
-
-/* Debugging function */
-// ============================================================================================================================
-func (t *SimpleChaincode) first_baggage(stub shim.ChaincodeStubInterface, args []string) ([]byte, error) {
-	var err error
-
-	 str := `{"id": "aaa", "product": "foo", "templimit": "20", "humlimit": "20", "state": "0"}`
-	// str := "test"
-	err = stub.PutState("aaa", []byte(str))
-	if err != nil {
-		return nil, errors.New("Unable to putstate for the fitst")
-	}
-
-	err = stub.PutState(BAGGAGE_INDEX_STR, []byte("aaa"))
-	if err != nil {
-		return nil, errors.New("Unable to putstate for the list")
-	}
-	return nil, nil
-}
-
-func (t *SimpleChaincode) argtest_zero(stub shim.ChaincodeStubInterface, args []string) ([]byte, error) {
-	id := args[0]
-	//outputzero := id + "desu"
-	return []byte(id), nil
-}
-
-func (t *SimpleChaincode) argtest_one(stub shim.ChaincodeStubInterface, args []string) ([]byte, error) {
-	return []byte(args[1]), nil
-}
-
-func (t *SimpleChaincode) argtest_two(stub shim.ChaincodeStubInterface, args []string) ([]byte, error) {
-	return []byte(args[2]), nil
-}
-
-func (t *SimpleChaincode) argtest_three(stub shim.ChaincodeStubInterface, args []string) ([]byte, error) {
-	return []byte(args[3]), nil
 }
