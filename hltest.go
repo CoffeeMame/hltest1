@@ -302,33 +302,25 @@ func (t *SimpleChaincode) change_state(stub shim.ChaincodeStubInterface, args []
 	// var TempLimitVal, HumLimitVal, tempVal, humVal int
 	var err error
 
-/*
 	if len(args) != 5 {
-		// return nil, errors.New("Incorrect number of arguments. Expecting 5")
-		return []byte("hoge1"), nil
+		return nil, errors.New("Incorrect number of arguments. Expecting 5")
 	}
 
 	if len(args[0]) <= 0 {
-		// return nil, errors.New("1st argument must be a non-empty string")
-		return []byte("hoge2"), nil
+		return nil, errors.New("1st argument must be a non-empty string")
 	}
 	if len(args[1]) <= 0 {
-		// return nil, errors.New("2nd argument must be a non-empty string")
-		return []byte("hoge3"), nil
+		return nil, errors.New("2nd argument must be a non-empty string")
 	}
 	if len(args[2]) <= 0 {
-		// return nil, errors.New("3rd argument must be a non-empty string")
-		return []byte("hoge4"), nil
+		return nil, errors.New("3rd argument must be a non-empty string")
 	}
 	if len(args[3]) <= 0 {
-		// return nil, errors.New("4th argument must be a non-empty string")
-		return []byte("hoge5"), nil
+		return nil, errors.New("4th argument must be a non-empty string")
 	}
 	if len(args[4]) <= 0 {
-		// return nil, errors.New("5th argument must be a non-empty string")
-		return []byte("hoge6"), nil
+		return nil, errors.New("5th argument must be a non-empty string")
 	}
-*/
 	id = args[0]
 	// tempVal, err = strconv.Atoi(args[1])
 	// humVal, err = strconv.Atoi(args[2])
