@@ -321,8 +321,8 @@ func (t *SimpleChaincode) change_state(stub shim.ChaincodeStubInterface, args []
 		return nil, errors.New("5th argument must be a non-empty string")
 	}
 	id = args[0]
-	tempVal, err = strconv.Atoi(args[1])
-	humVal, err = strconv.Atoi(args[2])
+	tempVal, err := strconv.Atoi(args[1])
+	humVal, err := strconv.Atoi(args[2])
 	prestate = args[3]
 	poststate = args[4]
 	// 存在チェック
@@ -345,12 +345,12 @@ func (t *SimpleChaincode) change_state(stub shim.ChaincodeStubInterface, args []
 
 	// 温度と湿度のチェック
 	//
-	TempLimitVal, err = strconv.Atoi(res.TempLimit)
+	TempLimitVal, err := strconv.Atoi(res.TempLimit)
 	if err != nil {
 		// return nil, errors.New("Expecting integer value")
 	}
 
-	HumLimitVal, err = strconv.Atoi(res.HumLimit)
+	HumLimitVal, err := strconv.Atoi(res.HumLimit)
 	if err != nil {
 		// return nil, errors.New("Expecting integer value")
 	}
