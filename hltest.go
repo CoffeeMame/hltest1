@@ -299,7 +299,7 @@ func (t *SimpleChaincode) local_delivery_to_customer(stub shim.ChaincodeStubInte
 func (t *SimpleChaincode) change_state(stub shim.ChaincodeStubInterface, args []string) ([]byte, error) {
 	// var id, prestate, poststate string
 	var id, poststate string
-	// var TempLimitVal, HumLimitVal, tempVal, humVal int
+  var TempLimitVal, HumLimitVal, tempVal, humVal int
 	// var tempVal, humVal int
 	var err error
 
@@ -323,8 +323,8 @@ func (t *SimpleChaincode) change_state(stub shim.ChaincodeStubInterface, args []
 		return nil, errors.New("5th argument must be a non-empty string")
 	}
 	id = args[0]
-	// tempVal, err = strconv.Atoi(args[1])
-	// humVal, err = strconv.Atoi(args[2])
+	tempVal, err = strconv.Atoi(args[1])
+	humVal, err = strconv.Atoi(args[2])
 	// prestate = args[3]
 	poststate = args[4]
 	// 存在チェック
@@ -340,7 +340,6 @@ func (t *SimpleChaincode) change_state(stub shim.ChaincodeStubInterface, args []
 	json.Unmarshal(baggageAsBytes, &res)
 
 	// 現在の状態をチェック
-	// Stateが0でない場合はエラー
 	/*
 	if res.State != prestate {
 		return nil, errors.New("This baggage can not be accepted")
@@ -349,26 +348,25 @@ func (t *SimpleChaincode) change_state(stub shim.ChaincodeStubInterface, args []
 
 	// 温度と湿度のチェック
 	//
-	/*
-	TempLimitVal, err := strconv.Atoi(res.TempLimit)
+
+	TempLimitVal, err = strconv.Atoi(res.TempLimit)
 	if err != nil {
-		// return nil, errors.New("Expecting integer value")
+		return nil, errors.New("Expecting integer value")
 	}
 
-	HumLimitVal, err := strconv.Atoi(res.HumLimit)
+	HumLimitVal, err = strconv.Atoi(res.HumLimit)
 	if err != nil {
-		// return nil, errors.New("Expecting integer value")
+		return nil, errors.New("Expecting integer value")
 	}
 
 	if TempLimitVal < tempVal {
-		// return nil, errors.New("Temp Over")
-
+		return nil, errors.New("Temp Over")
 	}
 
 	if HumLimitVal < humVal {
-		// return nil, errors.New("Hum Over")
+		return nil, errors.New("Hum Over")
 	}
-	*/
+
 	//if tempVal < humVal {
 		//
 	//}
