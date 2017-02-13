@@ -348,7 +348,6 @@ func (t *SimpleChaincode) change_state(stub shim.ChaincodeStubInterface, args []
 
 	// 温度と湿度のチェック
 	//
-	/*
 
 	TempLimitVal, err = strconv.Atoi(res.TempLimit)
 	if err != nil {
@@ -361,18 +360,17 @@ func (t *SimpleChaincode) change_state(stub shim.ChaincodeStubInterface, args []
 	}
 
 	if TempLimitVal < tempVal {
-		return nil, errors.New("Temp Over")
+		// return nil, errors.New("Temp Over")
 	}
 
 	if HumLimitVal < humVal {
-		return nil, errors.New("Hum Over")
+		// return nil, errors.New("Hum Over")
 	}
 
-	*/
 
-	if tempVal < humVal {
+	//if tempVal < humVal {
 		//
-	}
+	//}
 
 	// 状態を更新
 	res.State = poststate
