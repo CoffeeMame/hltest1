@@ -299,8 +299,8 @@ func (t *SimpleChaincode) local_delivery_to_customer(stub shim.ChaincodeStubInte
 func (t *SimpleChaincode) change_state(stub shim.ChaincodeStubInterface, args []string) ([]byte, error) {
 	// var id, prestate, poststate string
 	var id, poststate string
-  var TempLimitVal, HumLimitVal, tempVal, humVal int
-	// var tempVal, humVal int
+  // var TempLimitVal, HumLimitVal, tempVal, humVal int
+	var tempVal, humVal int
 	var err error
 
 	if len(args) != 5 {
