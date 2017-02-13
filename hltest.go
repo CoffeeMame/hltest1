@@ -231,6 +231,36 @@ func (t *SimpleChaincode) create_baggage(stub shim.ChaincodeStubInterface, args 
 }
 
 
+//=============================================================================================================================
+//	 Delete Baggage - IDを指定して荷物を削除する
+//=============================================================================================================================
+func (t *SimpleChaincode) delete_baggage(stub shim.ChaincodeStubInterface, args []string) ([]byte, error) {
+	var err error
+
+	// 引数の数をチェック
+	if len(args) != 1 {
+		return nil, errors.New("Incorrect number of arguments. Expecting 1")
+	}
+	// 引数が空でないことをチェック
+	if len(args[0]) <= 0 {
+		return nil, errors.New("1st argument must be a non-empty string")
+	}
+
+	err = stub.DelState(args[0])
+	if err != nil {
+		return nil, errors.New("Fail to Delete Baggage")
+	}
+
+	return nil, nil
+}
+//=============================================================================================================================
+//	 Clear Baggage - Blockchain上に保持されている全ての荷物情報を削除する
+//=============================================================================================================================
+func (t *SimpleChaincode) clear_baggage(stub shim.ChaincodeStubInterface, args []string) ([]byte, error) {
+
+}
+
+
 // ============================================================================================================================
 // Warehouse to Truck - 倉庫からトラックに荷物を引き渡す
 // ============================================================================================================================
