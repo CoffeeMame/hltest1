@@ -247,11 +247,21 @@ func (t *SimpleChaincode) delete_baggage(stub shim.ChaincodeStubInterface, args 
 		return nil, errors.New("1st argument must be a non-empty string")
 	}
 
+	// 要素を削除
 	err = stub.DelState(args[0])
 	if err != nil {
 		return nil, errors.New("Fail to Delete Baggage")
 	}
 
+	// IDのスライスから削除
+	indexslice := GetState(BAGGAGE_INDEX_STR)
+	s := make([]string, len(indexslice) - 1 )
+	for i = 0, len(indexslice), i++ {
+		if indexslice == args[0] {
+			s.append(indexslice[i])
+		}
+	}
+	err = stub.PutState(BAGGAGE_INDEX_STR, s)
 	return nil, nil
 }
 //=============================================================================================================================
