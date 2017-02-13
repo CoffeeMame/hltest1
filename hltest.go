@@ -103,6 +103,8 @@ func (t *SimpleChaincode) Invoke(stub shim.ChaincodeStubInterface, function stri
 		return t.local_depo_to_local_delivery(stub, args)
 	} else if function == "local_delivery_to_customer" {
 		return t.local_delivery_to_customer(stub, args)
+	} else if function == "delete_baggage" {
+		return t.delete_baggage(stub, args)
 	}
 
 	fmt.Println("invoke did not find func: " + function)
@@ -145,7 +147,6 @@ func (t *SimpleChaincode) read(stub shim.ChaincodeStubInterface, args []string) 
 		jsonResp = "{\"Error\":\"Failed to get state for " + id + "\"}"
 		return nil, errors.New(jsonResp)
 	}
-
 
 	//send it onward
 	return valAsbytes, nil
@@ -257,7 +258,7 @@ func (t *SimpleChaincode) delete_baggage(stub shim.ChaincodeStubInterface, args 
 //	 Clear Baggage - Blockchain上に保持されている全ての荷物情報を削除する
 //=============================================================================================================================
 func (t *SimpleChaincode) clear_baggage(stub shim.ChaincodeStubInterface, args []string) ([]byte, error) {
-
+	return nil, nil
 }
 
 
