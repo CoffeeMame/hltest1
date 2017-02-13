@@ -258,10 +258,11 @@ func (t *SimpleChaincode) delete_baggage(stub shim.ChaincodeStubInterface, args 
 	s := make([]string, len(indexslice) - 1 )
 	for i := 0; i < len(indexslice); i++ {
 		if string(indexslice[i]) != args[0] {
-			s = append(s, indexslice[i])
+			s = append(s, string(indexslice[i]))
 		}
 	}
-	err = stub.PutState(BAGGAGE_INDEX_STR, s)
+	jsonAsBytes, _ := json.Marshal(s)
+	err = stub.PutState(BAGGAGE_INDEX_STR, jsonAsBytes)
 	return nil, nil
 }
 //=============================================================================================================================
