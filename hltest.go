@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"github.com/hyperledger/fabric/core/chaincode/shim"
 	"encoding/json"
-//	"strconv"
+	"strconv"
 //	"strings"
 //	"regexp"
 )
@@ -298,7 +298,7 @@ func (t *SimpleChaincode) local_delivery_to_customer(stub shim.ChaincodeStubInte
 // ============================================================================================================================
 func (t *SimpleChaincode) change_state(stub shim.ChaincodeStubInterface, args []string) ([]byte, error) {
 	var id, prestate, poststate string
-	// var TempLimitVal, HumLimitVal, tempVal, humVal int
+	var TempLimitVal, HumLimitVal, tempVal, humVal int
 	var err error
 
 	if len(args) != 5 {
@@ -321,9 +321,9 @@ func (t *SimpleChaincode) change_state(stub shim.ChaincodeStubInterface, args []
 		return nil, errors.New("5th argument must be a non-empty string")
 	}
 	id = args[0]
-	// tempVal, err = strconv.Atoi(args[1])
-	// humVal, err = strconv.Atoi(args[2])
-	// prestate = args[3]
+	tempVal, err = strconv.Atoi(args[1])
+	humVal, err = strconv.Atoi(args[2])
+	prestate = args[3]
 	poststate = args[4]
 	// 存在チェック
 	// 指定されたIDが存在しない場合にエラー
