@@ -301,6 +301,7 @@ func (t *SimpleChaincode) change_state(stub shim.ChaincodeStubInterface, args []
 	var TempLimitVal, HumLimitVal, tempVal, humVal int
 	var err error
 
+/*
 	if len(args) != 5 {
 		// return nil, errors.New("Incorrect number of arguments. Expecting 5")
 		return []byte("hoge1"), nil
@@ -326,7 +327,7 @@ func (t *SimpleChaincode) change_state(stub shim.ChaincodeStubInterface, args []
 		// return nil, errors.New("5th argument must be a non-empty string")
 		return []byte("hoge6"), nil
 	}
-
+*/
 	id = args[0]
 	tempVal, err = strconv.Atoi(args[1])
 	humVal, err = strconv.Atoi(args[2])
@@ -344,7 +345,7 @@ func (t *SimpleChaincode) change_state(stub shim.ChaincodeStubInterface, args []
 	}
 	res := Baggage{}
 	json.Unmarshal(baggageAsBytes, &res)
-
+/*
 	// 現在の状態をチェック
 	// Stateが0でない場合はエラー
 	if res.State != prestate {
@@ -375,7 +376,7 @@ func (t *SimpleChaincode) change_state(stub shim.ChaincodeStubInterface, args []
 		// return nil, errors.New("Hum Over")
 		return []byte("hoge12"), nil
 	}
-
+*/
 	// 状態を更新
 	res.State = poststate
 	// 台帳への書き込み
