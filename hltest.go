@@ -297,8 +297,7 @@ func (t *SimpleChaincode) local_delivery_to_customer(stub shim.ChaincodeStubInte
 // Change State - 荷物の状態を更新する
 // ============================================================================================================================
 func (t *SimpleChaincode) change_state(stub shim.ChaincodeStubInterface, args []string) ([]byte, error) {
-	// var id, prestate, poststate string
-	var id, poststate string
+	var id, prestate, poststate string
 	// var TempLimitVal, HumLimitVal, tempVal, humVal int
 	var err error
 
