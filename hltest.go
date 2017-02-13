@@ -333,19 +333,17 @@ func (t *SimpleChaincode) change_state(stub shim.ChaincodeStubInterface, args []
 	// baggage情報の取り出し
 	baggageAsBytes, err := stub.GetState(id)
 	if err != nil {
-		// return nil, errors.New("Failed to get baggage info")
-		return []byte("hoge7"), nil
+		return nil, errors.New("Failed to get baggage info")
 	}
 	res := Baggage{}
 	json.Unmarshal(baggageAsBytes, &res)
-/*
+
 	// 現在の状態をチェック
 	// Stateが0でない場合はエラー
 	if res.State != prestate {
-		// return nil, errors.New("This baggage can not be accepted")
-		return []byte("hoge8"), nil
+		return nil, errors.New("This baggage can not be accepted")
 	}
-
+/*
 	// 温度と湿度のチェック
 	//
 	TempLimitVal, err = strconv.Atoi(res.TempLimit)
