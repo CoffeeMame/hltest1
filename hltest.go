@@ -360,7 +360,7 @@ func (t *SimpleChaincode) change_state(stub shim.ChaincodeStubInterface, args []
 		return []byte("hoge9"), nil
 	}
 
-	HumLimitVal, err = strconv.Atoi(res.TempLimit)
+	HumLimitVal, err = strconv.Atoi(res.HumLimit)
 	if err != nil {
 		// return nil, errors.New("Expecting integer value")
 		return []byte("hoge10"), nil
