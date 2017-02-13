@@ -326,7 +326,7 @@ func (t *SimpleChaincode) change_state(stub shim.ChaincodeStubInterface, args []
 	// tempVal, err = strconv.Atoi(args[1])
 	// humVal, err = strconv.Atoi(args[2])
 	prestate = args[3]
-	poststate = args[4]
+	// poststate = args[4]
 	// 存在チェック
 	// 指定されたIDが存在しない場合にエラー
 	// ======未実装======
