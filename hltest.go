@@ -59,13 +59,6 @@ type Baggage struct {
 }
 
 //==============================================================================================================================
-//	 General Functions
-//==============================================================================================================================
-
-
-
-
-//==============================================================================================================================
 //	 Router Functions
 //==============================================================================================================================
 // ============================================================================================================================
@@ -105,6 +98,8 @@ func (t *SimpleChaincode) Invoke(stub shim.ChaincodeStubInterface, function stri
 		return t.local_delivery_to_customer(stub, args)
 	} else if function == "delete_baggage" {
 		return t.delete_baggage(stub, args)
+	} else if function == "clear_baggage" {
+		return t.clear_baggage(stub, args)
 	}
 
 	fmt.Println("invoke did not find func: " + function)
@@ -266,15 +261,33 @@ func (t *SimpleChaincode) delete_baggage(stub shim.ChaincodeStubInterface, args 
 	}
 	jsonAsBytes, _ := json.Marshal(s)
 	err = stub.PutState(BAGGAGE_INDEX_STR, jsonAsBytes)
+
 	return nil, nil
 }
 //=============================================================================================================================
 //	 Clear Baggage - Blockchain上に保持されている全ての荷物情報を削除する
 //=============================================================================================================================
 func (t *SimpleChaincode) clear_baggage(stub shim.ChaincodeStubInterface, args []string) ([]byte, error) {
+	var err error
+
+	// 登録された全てのIDを取得
+	baggagesAsBytes, _ := stub.GetState(BAGGAGE_INDEX_STR)
+	var baggageIndex []string
+	json.Unmarshal(baggagesAsBytes, &baggageIndex)
+
+	// 全てのIDをマッピングから削除
+	for i := 0; i < len(baggageIndex); i++ {
+		err = stub.DelState(baggageIndex[i])
+		if err != nil {
+			return nil, errors.New("Fail to Delete Baggage")
+		}
+	}
+
+	// IDスライスを削除
+	err = stub.DelState(BAGGAGE_INDEX_STR)
+
 	return nil, nil
 }
-
 
 // ============================================================================================================================
 // Warehouse to Truck - 倉庫からトラックに荷物を引き渡す
